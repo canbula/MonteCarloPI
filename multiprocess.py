@@ -1,24 +1,24 @@
-from bc_numba import TicToc, FindPi
+from bc import TicToc, FindPi
 import os
-from threading import Thread
+from multiprocessing import Process
 
 
 if __name__ == "__main__":
     tt = TicToc()
     tt.tic()
-    n = 1000000000
+    n = 100
     find_pis = []
-    threads = []
+    processes = []
     for i in range(os.cpu_count()):
         find_pis.append(FindPi())
-        threads.append(Thread(target=find_pis[i].throw_points, args=(n,)))
+        processes.append(Process(target=find_pis[i].throw_points, args=(n,)))
         print("Started thread number #%d" % i)
 
-    for thread in threads:
-        thread.start()
+    for process in processes:
+        process.start()
 
-    for thread in threads:
-        thread.join()
+    for process in processes:
+        process.join()
 
     inner = 0
     total = 0
